@@ -128,3 +128,15 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+package-lock.json
+JstoPython.interp
+JstoPython.tokens
+JstoPythonLexer.interp
+JstoPythonLexer.js
+JstoPythonLexer.tokens
+JstoPythonListener.js
+JstoPythonParser.js
+JstoPythonVisitor.js
+.antlr
