@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Javascript to python translator",
   "main": "main.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "grammar": "java -jar .\\antlr-4.12.0-complete.jar -visitor -Dlanguage=Python3 JstoPython.g4"
+    "grammar": "java -jar .\\antlr-4.12.0-complete.jar -visitor -Dlanguage=JavaScript JstoPython.g4"
   },
   "author": "",
   "license": "ISC",
