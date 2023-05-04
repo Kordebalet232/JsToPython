@@ -1,10 +1,10 @@
 function main(){
     let a1 = false; // inline comment
     a1 += 5;
-    if(){
+    if(a > 5){
         let b = 5;
         a1 += b;
-        if(){
+        if(a < b){
             a -=4;
         }
     };
