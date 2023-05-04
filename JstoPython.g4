@@ -18,7 +18,10 @@ embeddedStatement:
     | methodCall;
 localVariableDeclaration: variableType variableName (EQ variableValue)? ;
 condition: conditionHeader methodBody conditionElse?;
-conditionHeader: IF '('(WORD | INT) COMPAREOPERATION (WORD | INT)')';
+conditionHeader: conditionHeaderLeft conditionRule conditionHeaderRight;
+conditionHeaderLeft: IF '('(WORD | INT);
+conditionRule: COMPAREOPERATION;
+conditionHeaderRight: (WORD | INT)')';
 conditionElse: ELSE methodBody;
 methodCall: methodName '('methodCallAgruments')';
 methodCallAgruments: (WORD | INT) (',' (WORD | INT))*;

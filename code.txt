@@ -8,6 +8,12 @@ function main(a, b, c){
     else{
         a1 -= 5;
         MyFunc(2, 4, abc);
+        if (b === 5){
+            b -= 2;
+        };
+        if (b !== 5){
+            b += 2;
+        };
     }
 
 }

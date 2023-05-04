@@ -110,7 +110,7 @@ class Visitor extends JstoPythonVisitor{
     };
 
     visitCondition(ctx){
-        let pythonConditionHeader = `${ctx.conditionHeader().getText()}:`;
+        let pythonConditionHeader = this.visit(ctx.conditionHeader());
         this.contextLevel += 1;
         let pythonConditionBody = this.visit(ctx.methodBody());
         this.contextLevel -= 1;
@@ -122,6 +122,17 @@ class Visitor extends JstoPythonVisitor{
             return `${pythonConditionHeader}\n${pythonConditionBody}`;
         };
     };
+
+    visitConditionHeader(ctx){
+        let pythonCompareRule = ctx.conditionRule().getText();
+        if (pythonCompareRule == '==='){
+            pythonCompareRule = '==';
+        };
+        if (pythonCompareRule == '!=='){
+            pythonCompareRule = "!=";
+        };
+        return `${ctx.conditionHeaderLeft().getText()} ${pythonCompareRule} ${ctx.conditionHeaderRight().getText()}:`
+    }
 
     visitConditionElse(ctx){
         let pythonConditionElse = getIndentation(this.contextLevel) + 'else:\n';
