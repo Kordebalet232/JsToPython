@@ -16,9 +16,8 @@ embeddedStatement:
     | commentText
     | methodCall;
 localVariableDeclaration: variableType variableName (EQ variableValue)? ;
-condition: conditionHeader conditionBody;
+condition: conditionHeader methodBody;
 conditionHeader: IF '(' ')';
-conditionBody: '{''}';
 methodCall: methodName '(' ')';
 commentText: COMMENT;
 methodName: WORD;

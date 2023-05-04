@@ -37,6 +37,7 @@ class Visitor extends JstoPythonVisitor{
         this.contextLevel += 1;
         let body = ctx.methodBody();
         let pythonMethodBody = this.visit(body);
+        this.contextLevel -= 1;
         return `${pythonMethodHeader}\n${pythonMethodBody}`;
     };
     
@@ -48,7 +49,6 @@ class Visitor extends JstoPythonVisitor{
                 pythonLines[pythonLines.length - 1] = pythonLines[pythonLines.length - 1].slice(0, -1);
             }
         }
-        this.contextLevel -= 1;
         return pythonLines.join("\n");
     };
 
@@ -100,21 +100,16 @@ class Visitor extends JstoPythonVisitor{
     visitCondition(ctx){
         let pythonConditionHeader = `${ctx.conditionHeader().getText()}:`;
         this.contextLevel += 1;
-        let pythonConditionBody = this.visit(ctx.conditionBody());
+        let pythonConditionBody = this.visit(ctx.methodBody());
         this.contextLevel -= 1;
         return `${pythonConditionHeader}\n${pythonConditionBody}`;
-    }
-    visitConditionBody(ctx){
-        return  getIndentation(this.contextLevel) + ctx.getText();
-    }
+    };
 
     visitVariableOperation(ctx){
-        let pythonOperationLeft = ctx.leftOperationSide().getText()
-        let pythonOperationRight = ctx.rightOperationSide().getText()
-        console.log(pythonOperationLeft)
-        console.log(pythonOperationRight)
-        return pythonOperationLeft + pythonOperationRight
-    }
+        let pythonOperationLeft = ctx.leftOperationSide().getText();
+        let pythonOperationRight = ctx.rightOperationSide().getText();
+        return pythonOperationLeft + pythonOperationRight;
+    };
 };
 
 

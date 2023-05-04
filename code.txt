@@ -1,6 +1,13 @@
 function main(){
     let a1 = false; // inline comment
     a1 += 5;
+    if(){
+        let b = 5;
+        a1 += b;
+        if(){
+            a -=4;
+        }
+    };
 }
 
 
