@@ -1,9 +1,10 @@
 function main(){
-    let _a1 = true;
-    MyMethod();
+    let _a1 = false; // inline comment
+    // line comment
+    functioncall()
 }
 
-function test(){
-    var _bFEsf7 = "Some text with digits 0123";
-    SomeOtherMethod();
+function test(){ //commentHah
+    var a = 10
+    let b = false // hehe
 }

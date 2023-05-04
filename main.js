@@ -53,7 +53,11 @@ class Visitor extends JstoPythonVisitor{
     };
 
     visitStatement(ctx){
-        return this.visit(ctx.embeddedStatement())
+        let python_comments = "";
+        if (ctx.commentText()){
+            python_comments = this.visit(ctx.commentText());
+        }
+        return this.visit(ctx.embeddedStatement()) + " " + python_comments;
     };
 
     visitLocalVariableDeclaration(ctx){
@@ -73,8 +77,8 @@ class Visitor extends JstoPythonVisitor{
                 }
                 else{
                     result += `= ${varValue.getText()}`;
-                }
-            } 
+                };
+            };
         };
 
         return result;
@@ -89,6 +93,9 @@ class Visitor extends JstoPythonVisitor{
         return `def ${ctx.methodName().getText().toLowerCase()}():`;
     };
 
+    visitCommentText(ctx){
+        return '# ' + ctx.getText().slice(2);
+    };
 };
 
 
