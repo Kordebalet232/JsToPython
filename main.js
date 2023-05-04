@@ -64,7 +64,17 @@ class Visitor extends JstoPythonVisitor{
         let result = `${varName} `;
 
         if (varValue != null){
-            result += `= ${varValue.getText()}`;
+            if (varValue.getText() == 'true'){
+                result += `= True`;
+            }
+            else{
+                if (varValue.getText() == 'false'){
+                    result += `= False`;
+                }
+                else{
+                    result += `= ${varValue.getText()}`;
+                }
+            } 
         };
 
         return result;
