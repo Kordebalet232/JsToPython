@@ -102,8 +102,22 @@ class Visitor extends JstoPythonVisitor{
         this.contextLevel += 1;
         let pythonConditionBody = this.visit(ctx.methodBody());
         this.contextLevel -= 1;
-        return `${pythonConditionHeader}\n${pythonConditionBody}`;
+        if (ctx.conditionElse()){
+            let pythonConditionElse = this.visit(ctx.conditionElse())
+            return `${pythonConditionHeader}\n${pythonConditionBody}\n${pythonConditionElse}`;
+        }
+        else{
+            return `${pythonConditionHeader}\n${pythonConditionBody}`;
+        };
     };
+
+    visitConditionElse(ctx){
+        let pythonConditionElse = getIndentation(this.contextLevel) + 'else:\n';
+        this.contextLevel += 1;
+        pythonConditionElse += this.visit(ctx.methodBody());
+        this.contextLevel -= 1;
+        return pythonConditionElse;
+    }
 
     visitVariableOperation(ctx){
         let pythonOperationLeft = ctx.leftOperationSide().getText();

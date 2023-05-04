@@ -16,8 +16,9 @@ embeddedStatement:
     | commentText
     | methodCall;
 localVariableDeclaration: variableType variableName (EQ variableValue)? ;
-condition: conditionHeader methodBody;
+condition: conditionHeader methodBody conditionElse?;
 conditionHeader: IF '('(WORD | INT) COMPAREOPERATION (WORD | INT)')';
+conditionElse: ELSE methodBody;
 methodCall: methodName '(' ')';
 commentText: COMMENT;
 methodName: WORD;
@@ -33,6 +34,7 @@ rightOperationSide: (INT | '-'? WORD) (MATHOPERATION (WORD | INT))*;
  */
 
 IF: 'if';
+ELSE: 'else';
 EQ: '=';
 EQOPS: PLUSEQ | MINUSEQ | MULTEQ | DIVEQ | REMAINDEREQ;
 INT: '-'? [0-9]+;
@@ -58,9 +60,9 @@ fragment MULTEQ: '*=';
 fragment DIVEQ: '/=';
 fragment REMAINDEREQ: '%=';
 fragment EQUALITY: '==';
-fragment STREQUALITY: '===';
+fragment STREQUALITY: '==='; //!
 fragment INEQUALITY: '!=';
-fragment STRINEQUALITY: '!==';
+fragment STRINEQUALITY: '!=='; //!
 fragment LESS: '<';
 fragment LARGER: '>';
 fragment LESSOREQ: '<=';

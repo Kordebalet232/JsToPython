@@ -4,10 +4,11 @@ function main(){
     if(a > 5){
         let b = 5;
         a1 += b;
-        if(a < b){
-            a -=4;
-        }
-    };
+    }
+    else{
+        a1 -= 5;
+    }
+
 }
 
 
