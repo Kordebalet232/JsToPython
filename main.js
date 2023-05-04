@@ -1,26 +1,95 @@
-import antlr4, { CommonTokenStream, InputStream } from 'antlr4';
+import antlr4, { CommonTokenStream, FileStream, InputStream } from 'antlr4';
 import JstoPythonLexer from './JstoPythonLexer.js';
 import JstoPythonParser from './JstoPythonParser.js';
 import JstoPythonVisitor from './JstoPythonVisitor.js';
+import * as fs from 'fs';
 
-class Visitor extends JstoPythonVisitor{
-    visitLine(ctx){
-        let name = ctx.name()
-        let opinion = ctx.opinion()
-        console.log(name.getText(), opinion.getText())
-        return null
-    }
+
+function getIndentation(contextLevel){
+    return " ".repeat(4 * contextLevel);
 }
 
+class Visitor extends JstoPythonVisitor{
+
+    constructor(){
+        super();
+        this.contextLevel = 0;
+    };
+
+    visitStart(ctx){
+        return this.visit(ctx.methodDeclarations())
+    }
+
+    visitMethodDeclarations(ctx){
+        let pythonMethods = [];
+        for (let methodNum=0; methodNum < ctx.methodDeclaration().length; methodNum += 1){
+            pythonMethods.push(this.visit(ctx.methodDeclaration()[methodNum]));
+            if (pythonMethods[pythonMethods.length - 1].slice(-1) == ',') {
+                pythonMethods[pythonMethods.length - 1] = pythonMethods[pythonMethods.length - 1].slice(0, -1);
+            }
+        }
+        return pythonMethods.join("\n");
+    }
+
+    visitMethodDeclaration(ctx){
+        let header = ctx.methodHeader();
+        let pythonMethodHeader = getIndentation(this.contextLevel) + this.visit(header);
+        this.contextLevel += 1;
+        let body = ctx.methodBody();
+        let pythonMethodBody = this.visit(body);
+        return `${pythonMethodHeader}\n${pythonMethodBody}`;
+    };
+    
+    visitMethodBody(ctx){
+        let pythonLines = [];
+        for (let statementNum = 0; statementNum < ctx.statement().length; statementNum += 1){
+            pythonLines.push(getIndentation(this.contextLevel) + this.visit(ctx.statement()[statementNum]));
+            if (pythonLines[pythonLines.length - 1].slice(-1) == ',') {
+                pythonLines[pythonLines.length - 1] = pythonLines[pythonLines.length - 1].slice(0, -1);
+            }
+        }
+        this.contextLevel -= 1;
+        return pythonLines.join("\n");
+    };
+
+    visitStatement(ctx){
+        return this.visit(ctx.embeddedStatement())
+    };
+
+    visitLocalVariableDeclaration(ctx){
+        let varName = ctx.variableName().getText();
+        let vartype = ctx.variableType().getText();
+        let varValue = ctx.variableValue();
+
+        let result = `${varName} `;
+
+        if (varValue != null){
+            result += `= ${varValue.getText()}`;
+        };
+
+        return result;
+    };
+
+    visitMethodCall(ctx){
+        let methodName = ctx.methodName().getText();
+        return `${methodName.toLowerCase()}()`;
+    };
+
+    visitMethodHeader(ctx){
+        return `def ${ctx.methodName().getText().toLowerCase()}():`;
+    };
+
+};
 
 
 
-var code = "Bob says \"hello!\" \r\n Alice says \"hi!\" \r\n"
-var stream = new InputStream(code)
-var lexer = new JstoPythonLexer(stream)
-var stream = new CommonTokenStream(lexer)
-var parser = new JstoPythonParser(stream)
-var chatCtx = parser.chat()
-var visitor = new Visitor()
-var python_code = visitor.visit(chatCtx)
+var code = new FileStream("code.txt");
+// var inputstream = new InputStream(code)
+var lexer = new JstoPythonLexer(code);
+var stream = new CommonTokenStream(lexer);
+var parser = new JstoPythonParser(stream);
+var startContext = parser.start();
+var visitor = new Visitor();
+var python_code = visitor.visit(startContext);
 console.log(python_code)
+fs.writeFileSync("result.py", python_code)

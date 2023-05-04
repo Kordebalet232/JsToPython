@@ -3,63 +3,28 @@ grammar JstoPython;
 /*
  * Parser Rules
  */
-
-chat : line line EOF;
-line : name SAYS opinion NEWLINE;
-name : WORD;
-opinion: TEXT;
+start: methodDeclarations? EOF;
+methodDeclarations: methodDeclaration+ ;
+methodDeclaration: methodHeader methodBody ;
+methodHeader: 'function' methodName '(' ')';
+methodBody: '{' statement* '}';
+statement: embeddedStatement ';';
+embeddedStatement: localVariableDeclaration | methodCall;
+localVariableDeclaration: variableType variableName ('=' variableValue)? ;
+methodCall: methodName '(' ')';
+methodName: WORD;
+variableType: 'let' | 'var' | 'const';
+variableName: WORD;
+variableValue: INT | BOOLEAN | STRING;
 
  /*
  * Lexer Rules
  */
-
-fragment A: ('A'|'a') ;
-fragment S: ('S'|'s') ;
-fragment Y: ('Y'|'y') ;
 fragment LOWERCASE: [a-z] ;
 fragment UPPERCASE: [A-Z] ;
-SAYS: S A Y S;
-WORD: (LOWERCASE | UPPERCASE)+ ;
-TEXT: '"' .*? '"' ;
+INT: '-'? [0-9]+;
+BOOLEAN: 'true' | 'false';
+STRING: '"' .*? '"' ;
+WORD: [a-zA-Z_] [a-zA-Z0-9_]* ;
 WHITESPACE : (' '|'\t')+ -> skip ;
-NEWLINE: ('\r'? '\n' | '\r')+ ;
-
-// /*
-//  * Parser Rules
-//  */
-
-// start                       : methodDeclarations? | EOF ;
-// methodDeclarations          : methodDeclaration+ ;
-// methodDeclaration           : methodHeader methodBody ;
-// methodHeader                : 'def' methodName '(' ')' ':' NEWLINE ; 
-// methodBody                  : statement* ;
-// statement                   : emdeddedStatement commentText? NEWLINE* ;
-// emdeddedStatement
-//                             : localVariableDeclaration
-//                             | methodCall
-//                             | commentText
-//                              ;
-
-// localVariableDeclaration    : variableName '=' variableValue ;
-// methodCall                  : methodName '(' ')' ;
-// methodName                  : WORD ;
-// variableName                : WORD ;
-// variableValue
-//                             : BOOL 
-//                             | INT
-//                             | STRING
-//                             ;
-// commentText                 : COMMENT ;
-
-// /*
-//  * Lexer Rules
-//  */
-
-// INT                         : ('-')? [0-9]+;
-// BOOL                        : 'True' | 'False' ;
-// STRING                      : '"' .? '"' ;
-// WORD                        : [a-zA-Z] [a-zA-Z0-9]* ;
-// WHITESPACE                  : (' ')+ -> skip ;
-// NEWLINE                     : ('\r'? '\n' | '\r')+ ;
-// COMMENT                     : '#' ~[\r\n\f]* ;
-// ANY                         : . ;
+NEWLINE: ('\r'? '\n' | '\r')+ -> skip;

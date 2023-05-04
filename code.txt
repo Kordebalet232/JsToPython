@@ -1,0 +1,9 @@
+function main(){
+    let _a1 = true;
+    MyMethod();
+}
+
+function test(){
+    var _bFEsf7 = "Some text with digits 0123";
+    SomeOtherMethod();
+}
