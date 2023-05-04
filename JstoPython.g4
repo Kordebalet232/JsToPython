@@ -10,20 +10,32 @@ methodHeader: 'function' methodName '(' ')';
 methodBody: '{' statement* '}';
 statement: embeddedStatement EOL? commentText?;
 embeddedStatement:
-    localVariableDeclaration 
-    | methodCall
-    | commentText;
-localVariableDeclaration: variableType variableName ('=' variableValue)? ;
+    localVariableDeclaration
+    | variableOperation 
+    | condition
+    | commentText
+    | methodCall;
+localVariableDeclaration: variableType variableName (EQ variableValue)? ;
+condition: conditionHeader conditionBody;
+conditionHeader: IF '(' ')';
+conditionBody: '{''}';
 methodCall: methodName '(' ')';
 commentText: COMMENT;
 methodName: WORD;
 variableType: 'let' | 'var' | 'const';
 variableName: WORD;
 variableValue: INT | BOOLEAN | STRING;
+variableOperation: leftOperationSide rightOperationSide;
+leftOperationSide: WORD (EQOPS | EQ);
+rightOperationSide: (INT | '-'? WORD) (MATHOPERATION (WORD | INT))*;
 
  /*
  * Lexer Rules
  */
+
+IF: 'if';
+EQ: '=';
+EQOPS: '+='|'-='|'*='|'/='|'%=';
 INT: '-'? [0-9]+;
 BOOLEAN: 'true' | 'false';
 STRING: '"' .*? '"' ;
@@ -32,3 +44,11 @@ WHITESPACE : (' '|'\t')+ -> skip ;
 NEWLINE: ('\r'? '\n' | '\r')+ -> skip;
 COMMENT: '//' ~[\r\n\f]* ;
 EOL: ';';
+MATHOPERATION: PLUS | MINUS | MULT | POWER | DIV | INTDIV | REMAINDER;
+fragment PLUS: '+';
+fragment MINUS: '-';
+fragment MULT: '*';
+fragment POWER: '**';
+fragment DIV: '/';
+fragment INTDIV: '//';
+fragment REMAINDER: '%';

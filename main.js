@@ -96,6 +96,25 @@ class Visitor extends JstoPythonVisitor{
     visitCommentText(ctx){
         return '# ' + ctx.getText().slice(2);
     };
+
+    visitCondition(ctx){
+        let pythonConditionHeader = `${ctx.conditionHeader().getText()}:`;
+        this.contextLevel += 1;
+        let pythonConditionBody = this.visit(ctx.conditionBody());
+        this.contextLevel -= 1;
+        return `${pythonConditionHeader}\n${pythonConditionBody}`;
+    }
+    visitConditionBody(ctx){
+        return  getIndentation(this.contextLevel) + ctx.getText();
+    }
+
+    visitVariableOperation(ctx){
+        let pythonOperationLeft = ctx.leftOperationSide().getText()
+        let pythonOperationRight = ctx.rightOperationSide().getText()
+        console.log(pythonOperationLeft)
+        console.log(pythonOperationRight)
+        return pythonOperationLeft + pythonOperationRight
+    }
 };
 
 
