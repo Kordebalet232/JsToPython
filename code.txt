@@ -1,4 +1,4 @@
-function main(){
+function main(a, b, c){
     let a1 = false; // inline comment
     a1 += 5;
     if(a > 5){
@@ -7,6 +7,7 @@ function main(){
     }
     else{
         a1 -= 5;
+        MyFunc(2, 4, abc);
     }
 
 }

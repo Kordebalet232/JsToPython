@@ -86,11 +86,23 @@ class Visitor extends JstoPythonVisitor{
 
     visitMethodCall(ctx){
         let methodName = ctx.methodName().getText();
-        return `${methodName.toLowerCase()}()`;
+        if (ctx.methodCallAgruments){
+            let pythonMethodCallArguments = ctx.methodCallAgruments().getText();
+            return `${methodName.toLowerCase()}(${pythonMethodCallArguments})`;
+        }
+        else{
+            return `${methodName.toLowerCase()}()`;
+        };
     };
 
     visitMethodHeader(ctx){
-        return `def ${ctx.methodName().getText().toLowerCase()}():`;
+        if (ctx.methodDeclarationArguments()){
+            let pythonMethodDecArgs = ctx.methodDeclarationArguments().getText();
+            return `def ${ctx.methodName().getText().toLowerCase()}(${pythonMethodDecArgs}):`;
+        }
+        else{
+            return `def ${ctx.methodName().getText().toLowerCase()}():`;
+        };
     };
 
     visitCommentText(ctx){
