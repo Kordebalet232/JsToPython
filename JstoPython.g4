@@ -19,6 +19,7 @@ embeddedStatement:
     | whileCycle
     | cycleReservedWord
     | reservedMethodCall
+    | pointMethodCall
     | methodCall;
 reservedMethodCall: consoleLog '('methodCallAgruments?')';
 consoleLog: CONSOLELOG;
@@ -36,6 +37,7 @@ conditionHeaderLeft: IF '('(WORD | INT | FLOAT | BOOLEAN | STRING);
 conditionRule: COMPAREOPERATION;
 conditionHeaderRight: (WORD | INT | FLOAT | BOOLEAN | STRING)')';
 conditionElse: ELSE methodBody;
+pointMethodCall: variableName '.' methodName '('methodCallAgruments?')';
 methodCall: methodName '('methodCallAgruments')';
 methodCallAgruments: (WORD | INT | FLOAT | BOOLEAN | STRING) (',' (WORD | INT | FLOAT | BOOLEAN | STRING))*;
 commentText: COMMENT;
@@ -45,7 +47,7 @@ variableName: WORD;
 variableOperation: leftOperationSide rightOperationSide;
 leftOperationSide: WORD (EQOPS | EQ);
 rightOperationSide: (('('? (MATHOPERATION | (WORD | INT | FLOAT | BOOLEAN | STRING))')'?) | '(' | ')')*;
-variableValue: INT | BOOLEAN | STRING | FLOAT | WORD;
+variableValue: INT | BOOLEAN | STRING | FLOAT | WORD | ('['(INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))*']');
 
  /*
  * Lexer Rules

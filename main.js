@@ -218,6 +218,28 @@ class Visitor extends JstoPythonVisitor{
         };
         return `${pythonMethodCall}(${pythonArguments})`;
     };
+
+    visitPointMethodCall(ctx){
+        let pythonVariableName = ctx.variableName().getText();
+        let pythonMethodName = ctx.methodName().getText();
+        let pythonArguments = "";
+        if (ctx.methodCallAgruments()){
+            pythonArguments = ctx.methodCallAgruments().getText();
+        }
+        switch (pythonMethodName){
+            case 'push':
+                pythonMethodName = 'extend';
+                return `${pythonVariableName}.${pythonMethodName}([${pythonArguments}])`;
+            case 'pop':
+                pythonMethodName = 'pop';
+                return `${pythonVariableName}.${pythonMethodName}()`;
+            case 'shift':
+                pythonMethodName = 'pop';
+                return `${pythonVariableName}.${pythonMethodName}(0)`;
+            default:
+                return `${pythonVariableName}.${pythonMethodName}(${pythonArguments})`;
+        };
+    };
 };
 
 
