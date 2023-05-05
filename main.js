@@ -206,7 +206,7 @@ class Visitor extends JstoPythonVisitor{
 
 
 
-var code = new FileStream("code.txt");
+var code = new FileStream("code.js");
 // var inputstream = new InputStream(code)
 var lexer = new JstoPythonLexer(code);
 var stream = new CommonTokenStream(lexer);
