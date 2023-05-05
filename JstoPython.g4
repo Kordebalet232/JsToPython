@@ -21,7 +21,15 @@ embeddedStatement:
     | reservedMethodCall
     | pointMethodCall
     | getProperty
+    | returnMethodValue
     | methodCall;
+returnMethodValue: 'return' returnValue;
+returnValue: (INT 
+    | BOOLEAN 
+    | STRING 
+    | FLOAT 
+    | WORD 
+    | '[' (INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))* ']')+;
 reservedMethodCall: consoleLog '('methodCallAgruments?')';
 consoleLog: CONSOLELOG;
 cycleReservedWord: BREAK | CONTINUE;

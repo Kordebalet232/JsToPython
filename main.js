@@ -259,9 +259,11 @@ class Visitor extends JstoPythonVisitor{
             case 'has':
                 return `${pythonArguments} in ${pythonVariableName}`;
             case 'delete':
-                pythonMethodName = 'pop';
-            case 'remode':
-                pythonMethodName = 'delete';
+                pythonMethodName = 'discard';
+                return `${pythonVariableName}.${pythonMethodName}(${pythonArguments})`;
+            case 'remove':
+                pythonMethodName = 'del';
+                return `${pythonMethodName} ${pythonVariableName}[${pythonArguments}]`
             default:
                 return `${pythonVariableName}.${pythonMethodName}(${pythonArguments})`;
         };
@@ -279,6 +281,10 @@ class Visitor extends JstoPythonVisitor{
                 return `${pythonVariableName}.${pythonProperty}`;
         };
     };
+
+    visitReturnMethodValue(ctx){
+        return `return ${ctx.returnValue().getText()}`;
+    }
 };
 
 
