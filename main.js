@@ -62,23 +62,27 @@ class Visitor extends JstoPythonVisitor{
 
     visitLocalVariableDeclaration(ctx){
         let varName = ctx.variableName().getText();
-        let vartype = ctx.variableType().getText();
         let varValue = ctx.variableValue();
 
         let result = `${varName} `;
 
         if (varValue != null){
-            if (varValue.getText() == 'true'){
-                result += `= True`;
-            }
-            else{
-                if (varValue.getText() == 'false'){
+            switch(varValue.getText()){
+                case 'true':
+                    result += `= True`;
+                    break;
+                case 'false':
                     result += `= False`;
-                }
-                else{
+                    break;
+                case 'null':
+                    result += `= None`;
+                    break;
+                case 'undefined':
+                    result += `= None`;
+                    break;
+                default:
                     result += `= ${varValue.getText()}`;
-                };
-            };
+            }
         };
 
         return result;
