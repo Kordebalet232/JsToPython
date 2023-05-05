@@ -265,6 +265,19 @@ class Visitor extends JstoPythonVisitor{
                 return `${pythonVariableName}.${pythonMethodName}(${pythonArguments})`;
         };
     };
+
+    visitGetProperty(ctx){
+        let pythonVariableName = ctx.variableName().getText();
+        let pythonProperty = ctx.propertyName().getText();
+        switch (pythonProperty){
+            case 'length':
+                return `len(${pythonVariableName})`;
+            case 'size':
+                return `len(${pythonVariableName})`;
+            default:
+                return `${pythonVariableName}.${pythonProperty}`;
+        };
+    };
 };
 
 

@@ -20,6 +20,7 @@ embeddedStatement:
     | cycleReservedWord
     | reservedMethodCall
     | pointMethodCall
+    | getProperty
     | methodCall;
 reservedMethodCall: consoleLog '('methodCallAgruments?')';
 consoleLog: CONSOLELOG;
@@ -37,6 +38,8 @@ conditionHeaderLeft: IF '('(WORD | INT | FLOAT | BOOLEAN | STRING);
 conditionRule: COMPAREOPERATION;
 conditionHeaderRight: (WORD | INT | FLOAT | BOOLEAN | STRING)')';
 conditionElse: ELSE methodBody;
+getProperty: variableName '.' propertyName;
+propertyName: WORD;
 pointMethodCall: variableName '.' methodName '('methodCallAgruments?')';
 methodCall: methodName '('methodCallAgruments')';
 methodCallAgruments: (WORD | INT | FLOAT | BOOLEAN | STRING) (',' (WORD | INT | FLOAT | BOOLEAN | STRING))*;
@@ -46,13 +49,13 @@ variableType: 'let' | 'var' | 'const';
 variableName: WORD;
 variableOperation: leftOperationSide rightOperationSide;
 leftOperationSide: WORD ('['INT']')? (EQOPS | EQ);
-rightOperationSide: (('('? (MATHOPERATION | (WORD ('['INT']')? | INT | FLOAT | BOOLEAN | STRING))')'?) | '(' | ')')*;
+rightOperationSide: (('('? (MATHOPERATION | (WORD ('['INT']')? | INT | FLOAT | BOOLEAN | STRING))')'?) | '(' | ')' | ('('? (MATHOPERATION | '[' (INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))* ']')')'?))*;
 variableValue: INT 
     | BOOLEAN 
     | STRING 
     | FLOAT 
     | WORD 
-    | '['(INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))*']'
+    | '[' (INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))* ']'
     | structureCreation;
 structureCreation: structureName '('structureArgs')';
 structureName: 'new' WORD;
