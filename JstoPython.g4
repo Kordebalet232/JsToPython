@@ -18,35 +18,39 @@ embeddedStatement:
     | forCycle
     | whileCycle
     | cycleReservedWord
+    | reservedMethodCall
     | methodCall;
+reservedMethodCall: consoleLog '('methodCallAgruments?')';
+consoleLog: CONSOLELOG;
 cycleReservedWord: BREAK | CONTINUE;
 whileCycle: WHILE '(' forCycleRule ')' methodBody;
 forCycle:  forCycleHeader methodBody;
 forCycleHeader: FOR '(' localVariableDeclaration? ';' forCycleRule? ';' variableOperation? ')';
 forCycleRule: forCycleRulePart forCycleRuleOperation forCycleRulePart;
-forCycleRulePart: (WORD | INT);
+forCycleRulePart: (WORD | INT | FLOAT | BOOLEAN | STRING);
 forCycleRuleOperation: COMPAREOPERATION;
 localVariableDeclaration: variableType variableName (EQ variableValue)? ;
 condition: conditionHeader methodBody conditionElse?;
 conditionHeader: conditionHeaderLeft conditionRule conditionHeaderRight;
-conditionHeaderLeft: IF '('(WORD | INT);
+conditionHeaderLeft: IF '('(WORD | INT | FLOAT | BOOLEAN | STRING);
 conditionRule: COMPAREOPERATION;
-conditionHeaderRight: (WORD | INT)')';
+conditionHeaderRight: (WORD | INT | FLOAT | BOOLEAN | STRING)')';
 conditionElse: ELSE methodBody;
 methodCall: methodName '('methodCallAgruments')';
-methodCallAgruments: (WORD | INT) (',' (WORD | INT))*;
+methodCallAgruments: (WORD | INT | FLOAT | BOOLEAN | STRING) (',' (WORD | INT | FLOAT | BOOLEAN | STRING))*;
 commentText: COMMENT;
 methodName: WORD;
 variableType: 'let' | 'var' | 'const';
 variableName: WORD;
-variableValue: INT | BOOLEAN | STRING | FLOAT;
 variableOperation: leftOperationSide rightOperationSide;
 leftOperationSide: WORD (EQOPS | EQ);
-rightOperationSide: (INT | '-'? WORD) (MATHOPERATION (WORD | INT))*;
+rightOperationSide: (('('? (MATHOPERATION | (WORD | INT | FLOAT | BOOLEAN | STRING))')'?) | '(' | ')')*;
+variableValue: INT | BOOLEAN | STRING | FLOAT | WORD;
 
  /*
  * Lexer Rules
  */
+CONSOLELOG: 'console.log';
 BREAK: 'break';
 CONTINUE: 'continue';
 WHILE: 'while';
@@ -55,6 +59,7 @@ IF: 'if';
 ELSE: 'else';
 EQ: '=';
 EQOPS: PLUSEQ | MINUSEQ | MULTEQ | DIVEQ | REMAINDEREQ;
+MATHOPERATION: PLUS | MINUS | MULT | POWER | DIV | INTDIV | REMAINDER;
 INT: '-'? [0-9]+;
 FLOAT: '-'? [0-9]+ '.' [0-9]+;
 BOOLEAN: 'true' | 'false';
@@ -64,7 +69,6 @@ WHITESPACE : (' '|'\t')+ -> skip ;
 NEWLINE: ('\r'? '\n' | '\r')+ -> skip;
 COMMENT: '//' ~[\r\n\f]* ;
 EOL: ';';
-MATHOPERATION: PLUS | MINUS | MULT | POWER | DIV | INTDIV | REMAINDER;
 COMPAREOPERATION: EQUALITY | STREQUALITY | INEQUALITY | STRINEQUALITY | LESS | LARGER | LESSOREQ | MOREOREQ;
 fragment PLUS: '+';
 fragment MINUS: '-';

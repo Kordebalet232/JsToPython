@@ -3,13 +3,12 @@ function main(a, b, c){
     if (a > 5){
         let i = 1;
         while (i <= 5){
-            a+=1;
-            i += 1;
+            a += (a1 + 5)**((2 - 4)/5);
+            i += (5 - 4);
+            console.log(a, 5, "abc");
             if (i == 2){
                 break;
             };
         };
     };
 }
-
-

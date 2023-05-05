@@ -202,6 +202,18 @@ class Visitor extends JstoPythonVisitor{
         let pythonOperationRight = ctx.rightOperationSide().getText();
         return pythonOperationLeft + pythonOperationRight;
     };
+    
+    visitReservedMethodCall(ctx){
+        let pythonMethodCall = "";
+        if (ctx.consoleLog()){
+            pythonMethodCall = "print"
+        };
+        let pythonArguments = "";
+        if (ctx.methodCallAgruments()){
+            pythonArguments = ctx.methodCallAgruments().getText();
+        };
+        return `${pythonMethodCall}(${pythonArguments})`;
+    };
 };
 
 
