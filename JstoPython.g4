@@ -45,8 +45,8 @@ methodName: WORD;
 variableType: 'let' | 'var' | 'const';
 variableName: WORD;
 variableOperation: leftOperationSide rightOperationSide;
-leftOperationSide: WORD (EQOPS | EQ);
-rightOperationSide: (('('? (MATHOPERATION | (WORD | INT | FLOAT | BOOLEAN | STRING))')'?) | '(' | ')')*;
+leftOperationSide: WORD ('['INT']')? (EQOPS | EQ);
+rightOperationSide: (('('? (MATHOPERATION | (WORD ('['INT']')? | INT | FLOAT | BOOLEAN | STRING))')'?) | '(' | ')')*;
 variableValue: INT | BOOLEAN | STRING | FLOAT | WORD | ('['(INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))*']');
 
  /*

@@ -12,6 +12,7 @@ function main(a, b, c){
         };
     };
     a1.push(10);
-    a1.shift();
-    a1.pop();
+    a[1] = "c";
+    b = a[1] + 2;
+
 }
