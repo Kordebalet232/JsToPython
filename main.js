@@ -62,12 +62,12 @@ class Visitor extends JstoPythonVisitor{
 
     visitLocalVariableDeclaration(ctx){
         let varName = ctx.variableName().getText();
-        let varValue = ctx.variableValue();
+        let varValue = this.visit(ctx.variableValue());
 
         let result = `${varName} `;
 
         if (varValue != null){
-            switch(varValue.getText()){
+            switch(varValue){
                 case 'true':
                     result += `= True`;
                     break;
@@ -81,11 +81,27 @@ class Visitor extends JstoPythonVisitor{
                     result += `= None`;
                     break;
                 default:
-                    result += `= ${varValue.getText()}`;
+                    result += `= ${varValue}`;
             }
         };
 
         return result;
+    };
+
+    visitVariableValue(ctx){
+        if (ctx.structureCreation()){
+            let pythonStructureName = ctx.structureCreation().structureName().getText();
+            let pythonStructureArgs = ctx.structureCreation().structureArgs().getText();
+            switch (pythonStructureName){
+                case 'newMap':
+                    return '{}';
+                case 'newSet':
+                    return `set(${pythonStructureArgs})`;
+            };
+        }
+        else{
+            return ctx.getText();
+        };
     };
 
     visitMethodCall(ctx){
@@ -236,6 +252,15 @@ class Visitor extends JstoPythonVisitor{
             case 'shift':
                 pythonMethodName = 'pop';
                 return `${pythonVariableName}.${pythonMethodName}(0)`;
+            case 'set':
+                pythonMethodName = 'update';
+                return `${pythonVariableName}.${pythonMethodName}({${pythonArguments}})`;
+            case 'has':
+                return `${pythonArguments} in ${pythonVariableName}`;
+            case 'delete':
+                pythonMethodName = 'pop';
+            case 'remode':
+                pythonMethodName = 'delete';
             default:
                 return `${pythonVariableName}.${pythonMethodName}(${pythonArguments})`;
         };

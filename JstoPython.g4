@@ -47,7 +47,16 @@ variableName: WORD;
 variableOperation: leftOperationSide rightOperationSide;
 leftOperationSide: WORD ('['INT']')? (EQOPS | EQ);
 rightOperationSide: (('('? (MATHOPERATION | (WORD ('['INT']')? | INT | FLOAT | BOOLEAN | STRING))')'?) | '(' | ')')*;
-variableValue: INT | BOOLEAN | STRING | FLOAT | WORD | ('['(INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))*']');
+variableValue: INT 
+    | BOOLEAN 
+    | STRING 
+    | FLOAT 
+    | WORD 
+    | '['(INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))*']'
+    | structureCreation;
+structureCreation: structureName '('structureArgs')';
+structureName: 'new' WORD;
+structureArgs: (INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))*;
 
  /*
  * Lexer Rules

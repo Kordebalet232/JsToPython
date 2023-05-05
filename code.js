@@ -1,18 +1,10 @@
 function main(a, b, c){
-    let a1 = [a, b, c, 10, 5, "text"]; // what if i put if here)
-    if (a > 5){
-        let i = 1;
-        while (i <= 5){
-            a += (a1 + 5)**((2 - 4)/5);
-            i += (5 - 4);
-            console.log(a, 5, "abc");
-            if (i == 2){
-                break;
-            };
-        };
-    };
-    a1.push(10);
-    a[1] = "c";
-    b = a[1] + 2;
-
+    let a = new Map();
+    let a1 = new Set(1, 2, "3", "4");
+    a.set(5, "25");
+    a.get(5);
+    a1.add(5);
+    a1.delete(5);
+    a1.has(5);
+    a1.clear();
 }
