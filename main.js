@@ -193,6 +193,10 @@ class Visitor extends JstoPythonVisitor{
         return `${pythonForCycleRulePart1}${pythonForCycleRuleOperation}${pythonForCycleRulePart2}`;
     };
 
+    visitCycleReservedWord(ctx){
+        return ctx.getText();
+    };
+
     visitVariableOperation(ctx){
         let pythonOperationLeft = ctx.leftOperationSide().getText();
         let pythonOperationRight = ctx.rightOperationSide().getText();
