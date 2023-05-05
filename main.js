@@ -132,7 +132,7 @@ class Visitor extends JstoPythonVisitor{
             pythonCompareRule = "!=";
         };
         return `${ctx.conditionHeaderLeft().getText()} ${pythonCompareRule} ${ctx.conditionHeaderRight().getText()}:`
-    }
+    };
 
     visitConditionElse(ctx){
         let pythonConditionElse = getIndentation(this.contextLevel) + 'else:\n';
@@ -140,7 +140,15 @@ class Visitor extends JstoPythonVisitor{
         pythonConditionElse += this.visit(ctx.methodBody());
         this.contextLevel -= 1;
         return pythonConditionElse;
-    }
+    };
+
+    visitWhileCycle(ctx){
+        let pythonWhileCycleRule = this.visit(ctx.forCycleRule());
+        this.contextLevel += 1;
+        let pythonWhileCycleBody = this.visit(ctx.methodBody());
+        this.contextLevel -=1;
+        return `while (${pythonWhileCycleRule}):\n${pythonWhileCycleBody}`;
+    };
 
     visitForCycle(ctx){
         let pythonForCycleHeader = "";
@@ -153,8 +161,8 @@ class Visitor extends JstoPythonVisitor{
         let pythonForCycleBody = this.visit(ctx.methodBody());
         pythonForCycleBody += `\n${getIndentation(this.contextLevel) + pythonLastOperation}`;
         this.contextLevel -= 1;
-        return `${pythonForCycleHeader}\n${pythonForCycleBody}`
-    }
+        return `${pythonForCycleHeader}\n${pythonForCycleBody}`;
+    };
 
     visitForCycleHeader(ctx){
         let pythonVariableDeclaration = "";
@@ -170,7 +178,7 @@ class Visitor extends JstoPythonVisitor{
             pythonVariableOperation = this.visit(ctx.variableOperation());
         };
         return [`${pythonVariableDeclaration}\n${getIndentation(this.contextLevel)}while (${pythonForCycleRule}):`, pythonVariableOperation];
-    }
+    };
 
     visitForCycleRule(ctx){
         let pythonForCycleRulePart1 = ctx.forCycleRulePart()[0].getText();
@@ -182,8 +190,8 @@ class Visitor extends JstoPythonVisitor{
         if (pythonForCycleRuleOperation == '!=='){
             pythonForCycleRuleOperation = '!=';
         };
-        return `${pythonForCycleRulePart1}${pythonForCycleRuleOperation}${pythonForCycleRulePart2}`
-    }
+        return `${pythonForCycleRulePart1}${pythonForCycleRuleOperation}${pythonForCycleRulePart2}`;
+    };
 
     visitVariableOperation(ctx){
         let pythonOperationLeft = ctx.leftOperationSide().getText();

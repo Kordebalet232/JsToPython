@@ -16,7 +16,9 @@ embeddedStatement:
     | condition
     | commentText
     | forCycle
+    | whileCycle
     | methodCall;
+whileCycle: WHILE '(' forCycleRule ')' methodBody;
 forCycle:  forCycleHeader methodBody;
 forCycleHeader: FOR '(' localVariableDeclaration? ';' forCycleRule? ';' variableOperation? ')';
 forCycleRule: forCycleRulePart forCycleRuleOperation forCycleRulePart;
@@ -43,6 +45,7 @@ rightOperationSide: (INT | '-'? WORD) (MATHOPERATION (WORD | INT))*;
  /*
  * Lexer Rules
  */
+WHILE: 'while';
 FOR: 'for';
 IF: 'if';
 ELSE: 'else';
