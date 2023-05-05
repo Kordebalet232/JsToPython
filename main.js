@@ -142,6 +142,49 @@ class Visitor extends JstoPythonVisitor{
         return pythonConditionElse;
     }
 
+    visitForCycle(ctx){
+        let pythonForCycleHeader = "";
+        let pythonLastOperation = "";
+        let header = []
+        header = this.visit(ctx.forCycleHeader());
+        pythonForCycleHeader = header[0];
+        pythonLastOperation = header[1];
+        this.contextLevel += 1;
+        let pythonForCycleBody = this.visit(ctx.methodBody());
+        pythonForCycleBody += `\n${getIndentation(this.contextLevel) + pythonLastOperation}`;
+        this.contextLevel -= 1;
+        return `${pythonForCycleHeader}\n${pythonForCycleBody}`
+    }
+
+    visitForCycleHeader(ctx){
+        let pythonVariableDeclaration = "";
+        if (ctx.localVariableDeclaration()){
+            pythonVariableDeclaration = this.visit(ctx.localVariableDeclaration());
+        };
+        let pythonForCycleRule = "";
+        if (ctx.forCycleRule()){
+            pythonForCycleRule = this.visit(ctx.forCycleRule());
+        };
+        let pythonVariableOperation = "";
+        if (ctx.variableOperation()){
+            pythonVariableOperation = this.visit(ctx.variableOperation());
+        };
+        return [`${pythonVariableDeclaration}\n${getIndentation(this.contextLevel)}while (${pythonForCycleRule}):`, pythonVariableOperation];
+    }
+
+    visitForCycleRule(ctx){
+        let pythonForCycleRulePart1 = ctx.forCycleRulePart()[0].getText();
+        let pythonForCycleRulePart2 = ctx.forCycleRulePart()[1].getText();
+        let pythonForCycleRuleOperation = ctx.forCycleRuleOperation().getText();
+        if (pythonForCycleRuleOperation == '==='){
+            pythonForCycleRuleOperation = '==';
+        };
+        if (pythonForCycleRuleOperation == '!=='){
+            pythonForCycleRuleOperation = '!=';
+        };
+        return `${pythonForCycleRulePart1}${pythonForCycleRuleOperation}${pythonForCycleRulePart2}`
+    }
+
     visitVariableOperation(ctx){
         let pythonOperationLeft = ctx.leftOperationSide().getText();
         let pythonOperationRight = ctx.rightOperationSide().getText();
@@ -160,4 +203,4 @@ var startContext = parser.start();
 var visitor = new Visitor();
 var python_code = visitor.visit(startContext);
 console.log(python_code)
-fs.writeFileSync("result.py", python_code)
+fs.writeFileSync("result.py", python_code);

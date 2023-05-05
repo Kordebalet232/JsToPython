@@ -15,7 +15,13 @@ embeddedStatement:
     | variableOperation 
     | condition
     | commentText
+    | forCycle
     | methodCall;
+forCycle:  forCycleHeader methodBody;
+forCycleHeader: FOR '(' localVariableDeclaration? ';' forCycleRule? ';' variableOperation? ')';
+forCycleRule: forCycleRulePart forCycleRuleOperation forCycleRulePart;
+forCycleRulePart: (WORD | INT);
+forCycleRuleOperation: COMPAREOPERATION;
 localVariableDeclaration: variableType variableName (EQ variableValue)? ;
 condition: conditionHeader methodBody conditionElse?;
 conditionHeader: conditionHeaderLeft conditionRule conditionHeaderRight;
@@ -37,7 +43,7 @@ rightOperationSide: (INT | '-'? WORD) (MATHOPERATION (WORD | INT))*;
  /*
  * Lexer Rules
  */
-
+FOR: 'for';
 IF: 'if';
 ELSE: 'else';
 EQ: '=';
@@ -65,9 +71,9 @@ fragment MULTEQ: '*=';
 fragment DIVEQ: '/=';
 fragment REMAINDEREQ: '%=';
 fragment EQUALITY: '==';
-fragment STREQUALITY: '==='; //!
+fragment STREQUALITY: '===';
 fragment INEQUALITY: '!=';
-fragment STRINEQUALITY: '!=='; //!
+fragment STRINEQUALITY: '!==';
 fragment LESS: '<';
 fragment LARGER: '>';
 fragment LESSOREQ: '<=';

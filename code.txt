@@ -1,21 +1,10 @@
 function main(a, b, c){
-    let a1 = false; // inline comment
-    a1 += 5;
-    if(a > 5){
-        let b = 5;
-        a1 += b;
-    }
-    else{
-        a1 -= 5;
-        MyFunc(2, 4, abc);
-        if (b === 5){
-            b -= 2;
+    let a1 = false; // what if i put if here)
+    if (a > 5){
+        for (let i = 1; i >= 5; i-=1){
+            a+=1;
         };
-        if (b !== 5){
-            b += 2;
-        };
-    }
-
+    };
 }
 
 
