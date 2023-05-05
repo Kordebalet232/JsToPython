@@ -4,8 +4,8 @@ grammar JstoPython;
  * Parser Rules
  */
 start: methodDeclarations? EOF;
-methodDeclarations: methodDeclaration+ ;
-methodDeclaration: methodHeader methodBody ;
+methodDeclarations: (methodDeclaration | statement)+ ;
+methodDeclaration: methodHeader methodBody EOL?;
 methodHeader: 'function' methodName '('methodDeclarationArguments?')';
 methodDeclarationArguments: WORD (',' WORD)*;
 methodBody: '{' statement* '}';
@@ -49,7 +49,11 @@ variableType: 'let' | 'var' | 'const';
 variableName: WORD;
 variableOperation: leftOperationSide rightOperationSide;
 leftOperationSide: WORD ('['INT']')? (EQOPS | EQ);
-rightOperationSide: (('('? (MATHOPERATION | (WORD ('['INT']')? | INT | FLOAT | BOOLEAN | STRING))')'?) | '(' | ')' | ('('? (MATHOPERATION | '[' (INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))* ']')')'?))*;
+rightOperationSide: (('('? (MATHOPERATION | (WORD ('['INT']')? | INT | FLOAT | BOOLEAN | STRING))')'?) 
+                    | '(' 
+                    | ')' 
+                    | ('('? (MATHOPERATION | '[' (INT | BOOLEAN | STRING | FLOAT | WORD)? (',' (WORD | INT | FLOAT | BOOLEAN | STRING))* ']')')'?)
+                    )*;
 variableValue: INT 
     | BOOLEAN 
     | STRING 

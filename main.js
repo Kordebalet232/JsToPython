@@ -22,12 +22,13 @@ class Visitor extends JstoPythonVisitor{
 
     visitMethodDeclarations(ctx){
         let pythonMethods = [];
-        for (let methodNum=0; methodNum < ctx.methodDeclaration().length; methodNum += 1){
-            pythonMethods.push(this.visit(ctx.methodDeclaration()[methodNum]));
-            if (pythonMethods[pythonMethods.length - 1].slice(-1) == ',') {
-                pythonMethods[pythonMethods.length - 1] = pythonMethods[pythonMethods.length - 1].slice(0, -1);
-            }
-        }
+        pythonMethods =this.visitChildren(ctx);
+        // for (let methodNum=0; methodNum < ctx.methodDeclaration().length; methodNum += 1){
+        //     pythonMethods.push(this.visit(ctx.methodDeclaration()[methodNum]));
+        //     if (pythonMethods[pythonMethods.length - 1].slice(-1) == ',') {
+        //         pythonMethods[pythonMethods.length - 1] = pythonMethods[pythonMethods.length - 1].slice(0, -1);
+        //     }
+        // }
         return pythonMethods.join("\n");
     }
 
@@ -108,20 +109,20 @@ class Visitor extends JstoPythonVisitor{
         let methodName = ctx.methodName().getText();
         if (ctx.methodCallAgruments){
             let pythonMethodCallArguments = ctx.methodCallAgruments().getText();
-            return `${methodName.toLowerCase()}(${pythonMethodCallArguments})`;
+            return `${methodName}(${pythonMethodCallArguments})`;
         }
         else{
-            return `${methodName.toLowerCase()}()`;
+            return `${methodName}()`;
         };
     };
 
     visitMethodHeader(ctx){
         if (ctx.methodDeclarationArguments()){
             let pythonMethodDecArgs = ctx.methodDeclarationArguments().getText();
-            return `def ${ctx.methodName().getText().toLowerCase()}(${pythonMethodDecArgs}):`;
+            return `def ${ctx.methodName().getText()}(${pythonMethodDecArgs}):`;
         }
         else{
-            return `def ${ctx.methodName().getText().toLowerCase()}():`;
+            return `def ${ctx.methodName().getText()}():`;
         };
     };
 
